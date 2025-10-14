@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Base styles */
+html, body {
+  height: 100%;
+}
+
+/* Smooth fonts */
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Prose defaults (works even without plugin to keep spacing sane) */
+.prose p { margin-top: 0.5rem; margin-bottom: 0.5rem; }
+.prose a { text-decoration: underline; }
+
+/* Better selection */
+::selection { background-color: #e0f2fe; }
+
+/* Tables inside articles use content width (no full-bleed) */
+.article-content.prose :where(table) {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-left: 0 !important;
+  transform: none !important;
+}
+
+/* Line clamp utilities (without plugin) */
+.line-clamp-1 { display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
+.line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.line-clamp-4 { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+
+/* FAQ details polish */
+details.faq-item summary::-webkit-details-marker { display: none; }
+details.faq-item[open] .faq-icon { transform: rotate(90deg); }
+details.faq-item summary { outline: none; }
