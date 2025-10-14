@@ -9,8 +9,12 @@ export const revalidate = 60;
 type PostsByCategoryRes = { posts: { nodes: CardPost[] } };
 
 export async function generateStaticParams() {
-  const data = await wpRequest<{ categories: { nodes: { slug: string }[] } }>(ALL_CATEGORY_SLUGS_QUERY);
-  return (data?.categories?.nodes ?? []).map((c) => ({ category: c.slug }));
+  try {
+    const data = await wpRequest<{ categories: { nodes: { slug: string }[] } }>(ALL_CATEGORY_SLUGS_QUERY);
+    return (data?.categories?.nodes ?? []).map((c) => ({ category: c.slug }));
+  } catch {
+    return [];
+  }
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ category: string }> }): Promise<Metadata> {

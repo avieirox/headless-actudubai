@@ -1,12 +1,18 @@
 import { GraphQLClient } from "graphql-request";
 
-export const wpClient = new GraphQLClient(
-  process.env.NEXT_PUBLIC_WP_GRAPHQL_URL!,
-  { fetch }
-);
+let _client: GraphQLClient | null = null;
+function getClient(): GraphQLClient {
+  if (_client) return _client;
+  const endpoint = process.env.NEXT_PUBLIC_WP_GRAPHQL_URL;
+  if (!endpoint) {
+    throw new Error("Missing NEXT_PUBLIC_WP_GRAPHQL_URL environment variable");
+  }
+  _client = new GraphQLClient(endpoint, { fetch });
+  return _client;
+}
 
 export async function wpRequest<T>(query: string, variables?: Record<string, any>) {
-  return wpClient.request<T>(query, variables ?? {});
+  return getClient().request<T>(query, variables ?? {});
 }
 
 type GraphQLClientError = {

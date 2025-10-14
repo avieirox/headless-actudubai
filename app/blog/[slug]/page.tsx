@@ -40,8 +40,12 @@ async function getPost(slug: string): Promise<PostDetail | null> {
 }
 
 export async function generateStaticParams() {
-  const data = await wpRequest<{ posts: { nodes: { slug: string }[] } }>(ALL_POST_SLUGS_QUERY);
-  return (data?.posts?.nodes ?? []).map((p) => ({ slug: p.slug }));
+  try {
+    const data = await wpRequest<{ posts: { nodes: { slug: string }[] } }>(ALL_POST_SLUGS_QUERY);
+    return (data?.posts?.nodes ?? []).map((p) => ({ slug: p.slug }));
+  } catch {
+    return [];
+  }
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
