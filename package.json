@@ -1,15 +1,15 @@
 {
-  "name": "next-15-headless-blog",
+  "name": "headless-actudubai",
   "private": true,
   "version": "0.1.0",
   "scripts": {
-  "dev": "next dev",
-  "build": "next build",
-  "pages:build": "npx @cloudflare/next-on-pages",
-  "start": "npx wrangler pages dev .vercel/output/static",
-  "lint": "next lint",
-  "type-check": "tsc --noEmit"
-},
+    "dev": "next dev",
+    "build": "next build",
+    "cf:build": "npx @cloudflare/next-on-pages",
+    "start": "npx wrangler pages dev .vercel/output/static",
+    "lint": "next lint",
+    "type-check": "tsc --noEmit"
+  },
   "dependencies": {
     "@tailwindcss/typography": "^0.5.13",
     "autoprefixer": "^10.4.18",

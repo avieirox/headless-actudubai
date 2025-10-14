@@ -2,7 +2,12 @@ name = "headless-actudubai"
 compatibility_date = "2025-10-14"
 
 [build]
-command = "npm run build"
+command = "npm run cf:build"
+pages_build_output_dir = ".vercel/output/static"
 
 [vars]
+NEXT_PUBLIC_WP_GRAPHQL_URL = "https://backoffice.actudubai.com/graphql"
 NEXT_PUBLIC_SITE_URL = "https://actudubai.com"
+YAHOO_RAPIDAPI_HOST = "yahoo-finance-real-time1.p.rapidapi.com"
+YAHOO_REGION = "US"
+YAHOO_LANG = "en-US"
