@@ -53,8 +53,9 @@ export async function generateStaticParams() {
   return params;
 }
 
-export async function generateMetadata({ params }: { params: { category: string; slug: string } }): Promise<Metadata> {
-  const post = await getPost(params.slug);
+export async function generateMetadata({ params }: { params: Promise<{ category: string; slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const post = await getPost(slug);
   if (!post) return {};
   const seo = post.seo;
   const title = seo?.title ?? post.title;
@@ -74,8 +75,9 @@ export async function generateMetadata({ params }: { params: { category: string;
   };
 }
 
-export default async function PostByCategoryPage({ params }: { params: { category: string; slug: string } }) {
-  const post = await getPost(params.slug);
+export default async function PostByCategoryPage({ params }: { params: Promise<{ category: string; slug: string }> }) {
+  const { slug } = await params;
+  const post = await getPost(slug);
   if (!post) return notFound();
 
   const img = post.featuredImage?.node;

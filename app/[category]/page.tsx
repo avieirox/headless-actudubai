@@ -13,22 +13,24 @@ export async function generateStaticParams() {
   return (data?.categories?.nodes ?? []).map((c) => ({ category: c.slug }));
 }
 
-export async function generateMetadata({ params }: { params: { category: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ category: string }> }): Promise<Metadata> {
+  const { category: categorySlug } = await params;
   const details = await wpRequest<{ category: { name?: string | null; description?: string | null } | null }>(
     CATEGORY_BY_SLUG_QUERY,
-    { slug: params.category }
+    { slug: categorySlug }
   );
-  const name = details?.category?.name || params.category;
+  const name = details?.category?.name || categorySlug;
   const description = details?.category?.description || `Articles in the ${name} category`;
   return { title: `${name} | ACTU Dubai`, description };
 }
 
-export default async function CategoryIndexPage({ params }: { params: { category: string } }) {
+export default async function CategoryIndexPage({ params }: { params: Promise<{ category: string }> }) {
+  const { category: categorySlug } = await params;
   const [{ category }, data] = await Promise.all([
-    wpRequest<{ category: { name?: string | null } | null }>(CATEGORY_BY_SLUG_QUERY, { slug: params.category }),
-    wpRequest<PostsByCategoryRes>(POSTS_BY_CATEGORY_SLUG_QUERY, { slug: params.category }),
+    wpRequest<{ category: { name?: string | null } | null }>(CATEGORY_BY_SLUG_QUERY, { slug: categorySlug }),
+    wpRequest<PostsByCategoryRes>(POSTS_BY_CATEGORY_SLUG_QUERY, { slug: categorySlug }),
   ]);
-  const displayName = category?.name || params.category;
+  const displayName = category?.name || categorySlug;
   const posts = data?.posts?.nodes ?? [];
 
   return (

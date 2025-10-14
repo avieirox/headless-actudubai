@@ -13,20 +13,22 @@ export async function generateStaticParams() {
   return (data?.categories?.nodes ?? []).map((c) => ({ slug: c.slug }));
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
   return {
-    title: `Categoría: ${params.slug} | ACTU Dubai`,
-    description: `Artículos de la categoría ${params.slug}`,
+    title: `Categoría: ${slug} | ACTU Dubai`,
+    description: `Artículos de la categoría ${slug}`,
   };
 }
 
-export default async function CategoriaPage({ params }: { params: { slug: string } }) {
-  const data = await wpRequest<PostsByCategoryRes>(POSTS_BY_CATEGORY_SLUG_QUERY, { slug: params.slug });
+export default async function CategoriaPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const data = await wpRequest<PostsByCategoryRes>(POSTS_BY_CATEGORY_SLUG_QUERY, { slug });
   const posts = data?.posts?.nodes ?? [];
 
   return (
     <Container>
-      <h2 className="mb-6 text-xl font-semibold">Categoría: {params.slug}</h2>
+      <h2 className="mb-6 text-xl font-semibold">Categoría: {slug}</h2>
       {posts.length === 0 ? (
         <p className="text-gray-600">No hay artículos en esta categoría.</p>
       ) : (
