@@ -21,20 +21,22 @@ export default function MarketTabs({ data }: { data: Partial<Record<TabKey, Quot
   if (!tabs.length) return null;
 
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white/70 p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900/40">
-      <div className="mb-4 -mx-1 flex items-center gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [-ms-overflow-style:none]">
-        {/* hide scrollbar in webkit */}
-        <style jsx>{`
-          div::-webkit-scrollbar{display:none}
-        `}</style>
+    <section className="w-full rounded-3xl border border-slate-200/70 bg-gradient-to-b from-white to-slate-50 p-5 shadow-sm ring-1 ring-black/5 dark:border-slate-800 dark:from-slate-900/40 dark:to-slate-900/20 dark:ring-white/5">
+      <div
+        role="tablist"
+        aria-label="Market categories"
+        className="mb-5 flex w-full flex-wrap items-center gap-2"
+      >
         {tabs.map((key) => (
           <button
             key={key}
+            role="tab"
+            aria-selected={active === key}
             onClick={() => setActive(key)}
-            className={`mx-1 rounded-full border px-3 py-1 text-sm transition whitespace-nowrap ${
+            className={`rounded-full px-3.5 py-1.5 text-sm font-medium transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 dark:focus-visible:ring-sky-400 ${
               active === key
-                ? "border-sky-300 bg-sky-50 text-sky-800 dark:border-sky-700 dark:bg-sky-900/30 dark:text-sky-200"
-                : "border-gray-200 bg-white text-gray-700 hover:bg-gray-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
+                ? "bg-sky-600 text-white shadow-sm dark:bg-sky-500"
+                : "bg-white text-slate-700 ring-1 ring-slate-200 hover:bg-slate-50 dark:bg-slate-800 dark:text-slate-200 dark:ring-slate-700"
             }`}
           >
             {TAB_LABELS[key]}
@@ -51,6 +53,6 @@ export default function MarketTabs({ data }: { data: Partial<Record<TabKey, Quot
           )}
         </div>
       ))}
-    </div>
+    </section>
   );
 }

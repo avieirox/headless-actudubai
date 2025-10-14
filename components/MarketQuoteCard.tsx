@@ -16,11 +16,11 @@ export default function MarketQuoteCard({ q }: { q: Quote }) {
   const changeStr = q.change != null ? `${up ? "+" : ""}${q.change.toFixed(2)}` : "";
 
   return (
-    <div className="rounded-2xl border border-gray-200 dark:border-slate-800 bg-white/70 dark:bg-slate-900/40 shadow-sm hover:shadow-md transition p-4">
+    <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 shadow-sm hover:shadow-md transition p-5">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <p className="text-sm text-gray-500 dark:text-slate-400 truncate">{q.name || q.symbol}</p>
-          <p className="font-heading text-lg font-semibold leading-tight">{q.symbol}</p>
+          <p className="text-sm text-slate-500 dark:text-slate-400 truncate">{q.name || q.symbol}</p>
+          <p className="font-heading text-xl font-semibold leading-tight tracking-tight">{q.symbol}</p>
         </div>
         <span
           className={clsx(
@@ -34,13 +34,13 @@ export default function MarketQuoteCard({ q }: { q: Quote }) {
         </span>
       </div>
       <div className="mt-3 flex items-baseline gap-2">
-        <span className="text-2xl font-semibold">{q.price != null ? q.price.toLocaleString(undefined, { maximumFractionDigits: 2 }) : "—"}</span>
+        <span className="text-3xl font-semibold">{q.price != null ? q.price.toLocaleString(undefined, { maximumFractionDigits: 2 }) : "—"}</span>
         <span className={clsx("text-sm", up ? "text-emerald-600" : "text-rose-600")}>{changeStr}</span>
         {q.currency ? <span className="text-xs text-gray-500">{q.currency}</span> : null}
       </div>
       {Array.isArray((q as any).spark) && (q as any).spark.length > 1 ? (
-        <div className="mt-2">
-          <Sparkline values={(q as any).spark as number[]} strokeClassName={up ? "stroke-emerald-600" : "stroke-rose-600"} />
+        <div className="mt-3">
+          <Sparkline values={(q as any).spark as number[]} height={52} strokeClassName={up ? "stroke-emerald-600" : "stroke-rose-600"} />
         </div>
       ) : null}
     </div>
