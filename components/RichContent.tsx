@@ -21,7 +21,10 @@ export default function RichContent({ html, className }: Props) {
       const actionEl = target.closest<HTMLElement>('[data-faq-action]');
       if (!actionEl) return;
       const action = actionEl.getAttribute('data-faq-action');
-      const group = actionEl.closest<HTMLElement>('[data-faq-group]') || el.querySelector('[data-faq-group]');
+      // TS no puede garantizar que `el` siga no-nulo dentro del closure.
+      // Volvemos a leer del ref y validamos.
+      const container = ref.current;
+      const group = actionEl.closest<HTMLElement>('[data-faq-group]') || container?.querySelector('[data-faq-group]');
       if (!group) return;
       const items = Array.from(group.querySelectorAll<HTMLDetailsElement>('details.faq-item'));
       if (action === 'open-all') {
@@ -39,4 +42,3 @@ export default function RichContent({ html, className }: Props) {
 
   return <div ref={ref} className={className} />;
 }
-

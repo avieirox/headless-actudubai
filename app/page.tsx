@@ -3,7 +3,7 @@ import { wpRequestWithSeoFallback, wpTryQueries } from "@/lib/wpClient";
 import { ALL_POSTS_QUERY, ALL_POSTS_QUERY_NO_SEO, ALL_POSTS_BARE_QUERY } from "@/lib/wpQueries";
 import { defaultSEO } from "@/lib/seo";
 import type { Metadata } from "next";
-import { PostSchema, type AllPostsRes } from "@/types/wordpress";
+import { PostSchema, type AllPostsRes, type Post } from "@/types/wordpress";
 import MarketGrid from "@/components/MarketGrid";
 import MarketTabs from "@/components/MarketTabs";
 import { getQuotes, getChart } from "@/lib/market/yahoo";
@@ -95,7 +95,8 @@ export default async function Page() {
     ALL_POSTS_BARE_QUERY,
   ]);
   const rawNodes = (data as any)?.posts?.nodes ?? [];
-  const posts = rawNodes.filter((n: any) => PostSchema.safeParse(n).success);
+  const isPost = (n: any): n is Post => PostSchema.safeParse(n).success;
+  const posts: Post[] = rawNodes.filter(isPost);
 
   return (
     <Container>

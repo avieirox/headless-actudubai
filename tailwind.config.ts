@@ -15,7 +15,7 @@ const config: Config = {
         sans: ["var(--font-lato)", ...defaultTheme.fontFamily.sans],
         heading: ["var(--font-montserrat)", ...defaultTheme.fontFamily.sans],
       },
-      typography: ({ theme }) => ({
+      typography: ({ theme }: { theme: any }) => ({
         DEFAULT: {
           css: {
             color: "#111827",
