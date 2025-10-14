@@ -1,7 +1,7 @@
 import { wpRequest } from "@/lib/wpClient";
 import { ALL_POSTS_BARE_QUERY } from "@/lib/wpQueries";
 
-export const revalidate = 60 * 60 * 24 * 7; // 1 week
+export const revalidate = 604800; // 1 week
 
 function baseUrl() {
   const url = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
@@ -35,4 +35,3 @@ export async function GET() {
     headers: { "Content-Type": "application/xml; charset=utf-8" },
   });
 }
-

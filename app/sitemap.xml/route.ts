@@ -1,6 +1,6 @@
 // Index sitemap that points to logical sub-sitemaps
 
-export const revalidate = 60 * 60 * 24 * 7; // 1 week
+export const revalidate = 604800; // 1 week
 
 function baseUrl() {
   const url = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
