@@ -13,10 +13,10 @@ export default function Footer() {
             <Link href="/about" className="hover:underline">About</Link>
             <Link href="/contact" className="hover:underline">Contact</Link>
             <Link href="/privacy" className="hover:underline">Privacy</Link>
+            <Link href="/sitemap" className="hover:underline">Sitemap</Link>
           </nav>
         </div>
       </Container>
     </footer>
   );
 }
-

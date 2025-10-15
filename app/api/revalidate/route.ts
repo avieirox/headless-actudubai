@@ -31,6 +31,12 @@ export async function POST(req: NextRequest) {
   // Los sub-sitemaps de Yoast se sirven vía rewrites + proxy
   // Revalidamos el estático propio
   unique.add("/sitemap-static.xml");
+  // Y el post-sitemap base que ahora tiene route dedicada
+  unique.add("/post-sitemap.xml");
+  // Añadimos también categorías y tags
+  unique.add("/category-sitemap.xml");
+  unique.add("/post_tag-sitemap.xml");
+  unique.add("/author-sitemap.xml");
   unique.add("/sitemap-static.xml");
 
   const { slug, category, paths } = body || {};
