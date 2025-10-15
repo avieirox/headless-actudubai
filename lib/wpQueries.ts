@@ -97,6 +97,25 @@ export const CATEGORY_BY_SLUG_QUERY = /* GraphQL */ `
   }
 `;
 
+// Category with Yoast SEO fields (may not exist on all schemas)
+export const CATEGORY_BY_SLUG_WITH_SEO_QUERY = /* GraphQL */ `
+  query CategoryBySlugWithSeo($slug: ID!) {
+    category(id: $slug, idType: SLUG) {
+      id
+      slug
+      name
+      description
+      count
+      seo {
+        title
+        metaDesc
+        opengraphTitle
+        opengraphDescription
+      }
+    }
+  }
+`;
+
 // Variante sin campos SEO (para fallback cuando el esquema no los expone)
 export const ALL_POSTS_QUERY_NO_SEO = /* GraphQL */ `
   query AllPostsNoSeo($first: Int = 100) {
@@ -206,6 +225,17 @@ export const ALL_AUTHORS_QUERY = /* GraphQL */ `
   query AllAuthors($first: Int = 1000) {
     users(first: $first, where: { hasPublishedPosts: POST }) {
       nodes { slug }
+    }
+  }
+`;
+
+// Fetch SEO data for a URI (front page, pages, posts) when WPGraphQL exposes nodeByUri
+export const SEO_BY_URI_QUERY = /* GraphQL */ `
+  query SeoByUri($uri: String!) {
+    nodeByUri(uri: $uri) {
+      ... on Page { seo { title metaDesc opengraphTitle opengraphDescription opengraphImage { mediaItemUrl } } title }
+      ... on Post { seo { title metaDesc opengraphTitle opengraphDescription opengraphImage { mediaItemUrl } } title }
+      ... on Category { seo { title metaDesc opengraphTitle opengraphDescription } name }
     }
   }
 `;

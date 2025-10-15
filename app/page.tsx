@@ -1,6 +1,6 @@
 import Container from "@/components/Container";
-import { wpRequestWithSeoFallback, wpTryQueries } from "@/lib/wpClient";
-import { ALL_POSTS_QUERY, ALL_POSTS_QUERY_NO_SEO, ALL_POSTS_BARE_QUERY } from "@/lib/wpQueries";
+import { wpRequest, wpRequestWithSeoFallback, wpTryQueries } from "@/lib/wpClient";
+import { ALL_POSTS_QUERY, ALL_POSTS_QUERY_NO_SEO, ALL_POSTS_BARE_QUERY, SEO_BY_URI_QUERY } from "@/lib/wpQueries";
 import { defaultSEO } from "@/lib/seo";
 import type { Metadata } from "next";
 import { PostSchema, type AllPostsRes, type Post } from "@/types/wordpress";
@@ -12,6 +12,23 @@ import ArticleMasonryCard from "@/components/ArticleMasonryCard";
 export const revalidate = 60; // ISR: cada 60s para noticias frecuentes
 
 export async function generateMetadata(): Promise<Metadata> {
+  try {
+    const data = await wpRequest<{ nodeByUri?: any }>(SEO_BY_URI_QUERY, { uri: "/" });
+    const node = data?.nodeByUri as any;
+    const seo = node?.seo;
+    if (seo) {
+      return {
+        title: seo.title ?? defaultSEO.title,
+        description: seo.metaDesc ?? defaultSEO.description,
+        openGraph: {
+          type: "website",
+          title: seo.opengraphTitle ?? seo.title ?? defaultSEO.title,
+          description: seo.opengraphDescription ?? seo.metaDesc ?? defaultSEO.description,
+          images: seo.opengraphImage?.mediaItemUrl ? [seo.opengraphImage.mediaItemUrl] : undefined,
+        },
+      };
+    }
+  } catch {}
   return {
     title: defaultSEO.title,
     description: defaultSEO.description,

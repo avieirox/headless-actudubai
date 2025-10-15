@@ -1,7 +1,7 @@
 import Container from "@/components/Container";
 import PostCard, { type Post as CardPost } from "@/components/PostCard";
-import { wpRequest } from "@/lib/wpClient";
-import { ALL_CATEGORY_SLUGS_QUERY, POSTS_BY_CATEGORY_SLUG_QUERY, CATEGORY_BY_SLUG_QUERY } from "@/lib/wpQueries";
+import { wpRequest, wpRequestWithSeoFallback } from "@/lib/wpClient";
+import { ALL_CATEGORY_SLUGS_QUERY, POSTS_BY_CATEGORY_SLUG_QUERY, CATEGORY_BY_SLUG_QUERY, CATEGORY_BY_SLUG_WITH_SEO_QUERY } from "@/lib/wpQueries";
 import type { Metadata } from "next";
 
 export const revalidate = 60;
@@ -19,13 +19,23 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Promise<{ category: string }> }): Promise<Metadata> {
   const { category: categorySlug } = await params;
-  const details = await wpRequest<{ category: { name?: string | null; description?: string | null } | null }>(
-    CATEGORY_BY_SLUG_QUERY,
-    { slug: categorySlug }
-  );
-  const name = details?.category?.name || categorySlug;
-  const description = details?.category?.description || `Articles in the ${name} category`;
-  return { title: `${name} | ACTU Dubai`, description };
+  const details = await wpRequestWithSeoFallback<{
+    category: { name?: string | null; description?: string | null; seo?: { title?: string | null; metaDesc?: string | null; opengraphTitle?: string | null; opengraphDescription?: string | null } | null } | null;
+  }>(CATEGORY_BY_SLUG_WITH_SEO_QUERY, CATEGORY_BY_SLUG_QUERY, { slug: categorySlug });
+  const cat = details?.category;
+  const name = cat?.name || categorySlug;
+  const seo = cat?.seo as any;
+  const title = (seo?.title as string) || `${name} | ACTU Dubai`;
+  const description = (seo?.metaDesc as string) || cat?.description || `Articles in the ${name} category`;
+  return {
+    title,
+    description,
+    openGraph: seo ? {
+      title: (seo?.opengraphTitle as string) || (seo?.title as string) || title,
+      description: (seo?.opengraphDescription as string) || (seo?.metaDesc as string) || description,
+      type: "website",
+    } : undefined,
+  };
 }
 
 export default async function CategoryIndexPage({ params }: { params: Promise<{ category: string }> }) {
