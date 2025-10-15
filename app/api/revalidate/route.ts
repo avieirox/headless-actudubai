@@ -26,6 +26,12 @@ export async function POST(req: NextRequest) {
   const unique = new Set<string>();
   // Siempre revalidar Home
   unique.add("/");
+  // Asegurar que los sitemaps se actualicen cuando haya cambios
+  unique.add("/sitemap.xml");
+  // Los sub-sitemaps de Yoast se sirven vía rewrites + proxy
+  // Revalidamos el estático propio
+  unique.add("/sitemap-static.xml");
+  unique.add("/sitemap-static.xml");
 
   const { slug, category, paths } = body || {};
   if (slug && category) unique.add(`/${category}/${slug}`);
