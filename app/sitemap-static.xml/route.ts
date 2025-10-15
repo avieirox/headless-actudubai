@@ -10,8 +10,7 @@ export async function GET() {
     // "https://actudubai.com/contact",
     // "https://actudubai.com/about-us",
     // "https://actudubai.com/comparador-de-tarjetas",
-    "https://actudubai.com/credit-cards",
-    "https://actudubai.com/privacy-policy",
+   
   ];
 
   const lastmod = new Date().toISOString();
