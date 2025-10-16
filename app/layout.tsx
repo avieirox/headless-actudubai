@@ -65,7 +65,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
               </div>
             </div>
           </header>
-          <main className="py-8">{children}</main>
+          <main className="py-0">{children}</main>
           <Footer />
         </div>
       </body>
